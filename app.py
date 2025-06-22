@@ -27,10 +27,10 @@ Include progression using volume, intensity, density, and complexity for strengt
 Return a clear, easy-to-follow weekly plan.
 """
         response = client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4o-16k",
             messages=[{"role":"user","content":prompt}],
             temperature=0.7,
-            max_tokens=3200
+            max_tokens=1500
         )
 
         st.markdown(response.choices[0].message.content)
