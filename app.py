@@ -1,8 +1,7 @@
 import streamlit as st
-import openai
-import os
+from openai import OpenAI
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 st.title("🏋️ Hybrid Training AI Bot")
 
@@ -27,12 +26,13 @@ Each week:
 Include progression using volume, intensity, density, and complexity for strength and gymnastics.
 Return a clear, easy-to-follow weekly plan.
 """
-        response = openai.ChatCompletion.create(
+        response = client.chat.completions.create(
             model="gpt-4o",
             messages=[{"role":"user","content":prompt}],
             temperature=0.7,
             max_tokens=3200
         )
+
         st.markdown(response.choices[0].message.content)
         st.markdown("---")
         st.markdown("_Written by Carlos Sousa, AI_")
