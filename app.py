@@ -1,15 +1,15 @@
 import streamlit as st
-from openai import OpenAI
-from openai.error import OpenAIError
+from openai import OpenAI, OpenAIError
 
 client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 st.title("🏋️ Hybrid Training AI Bot")
 
-cycles = st.number_input("How many 3-week cycles do you want?", min_value=1, max_value=6, value=1)
-experience = st.selectbox("Your training experience:", ["Beginner", "Intermediate", "Advanced"])
-goals = st.text_area("Your training goals:", "Build muscle and run a half marathon")
+# Reordered inputs: sessions, experience, cycles, then goals last
 weekly_sessions = st.number_input("How many sessions can you commit to in a week?", min_value=1, max_value=10, value=5)
+experience = st.selectbox("Your training experience:", ["Beginner", "Intermediate", "Advanced"])
+cycles = st.number_input("How many 3-week cycles do you want?", min_value=1, max_value=6, value=1)
+goals = st.text_area("Your training goals:", "Build muscle and run a half marathon")
 
 def generate_plan(prompt, model_name):
     try:
@@ -28,7 +28,7 @@ if st.button("Generate Program"):
     with st.spinner("Generating your plan..."):
         prompt = f"""
 You are a hybrid coach blending Max El-Hag, Nick DiMarco, and an elite running coach.
-Create {cycles} training cycles (3 weeks each) based on experience '{experience}' and goals: {goals}.
+Create {cycles} training cycles (3 weeks each) based on experience '{experience}', weekly sessions {weekly_sessions}, and goals: {goals}.
 Each week:
 - Monday: Upper Strength + Gymnastics
 - Tuesday: Lower Body Bodybuilding + Heavy Olympic Lifting
@@ -42,8 +42,7 @@ Include progression using volume, intensity, density, and complexity for strengt
 Return a clear, easy-to-follow weekly plan.
 """
 
-        # Try models in order until one works
-        for model in ["gpt-4o-16k", "gpt-4o", "gpt-3.5-turbo"]:
+        for model in ["gpt-4o-mini", "gpt-4o", "gpt-3.5-turbo"]:
             result = generate_plan(prompt, model)
             if result:
                 st.markdown(result)
@@ -52,3 +51,4 @@ Return a clear, easy-to-follow weekly plan.
                 break
         else:
             st.error("All model attempts failed. Please check your API key and model access.")
+
