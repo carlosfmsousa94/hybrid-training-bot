@@ -9,7 +9,7 @@ st.title("🏋️ Hybrid Training AI Bot")
 cycles = st.number_input("How many 3-week cycles do you want?", min_value=1, max_value=6, value=1)
 experience = st.selectbox("Your training experience:", ["Beginner", "Intermediate", "Advanced"])
 goals = st.text_area("Your training goals:", "Build muscle and run a half marathon")
-weekly sessions = st.number_input("How many sessions can you commit to in a week?", min_value=1, max value=10, value=5)
+weekly_sessions = st.number_input("How many sessions can you commit to in a week?", min_value=1, max_value=10, value=5)
 
 def generate_plan(prompt, model_name):
     try:
